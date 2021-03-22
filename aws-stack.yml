@@ -1,0 +1,145 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: AWS CloudFormation - Manuel Puchades
+
+Parameters:
+  AppUrl: 
+    Description: app jar location
+    Type: String
+    Default: https://s3.amazonaws.com/practica-2.cloud.michel/app.jar
+  AmiId: 
+    Description: Instance configuration
+    Type: 'AWS::EC2::Image::Id'
+    Default: ami-013f17f36f8b1fefb # Ubuntu 18.04 en la región us-east-1
+  DBPassword:
+    Description: Database password
+    Type: String
+    NoEcho: true
+    MinLength: 8
+  BucketName:
+    Description: S3 bucket name
+    Type: String
+
+Resources: 
+
+# Paso 1: Crear los Security Groups
+  # EC2 security group
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: EC2_SecurityGroup
+      GroupDescription: "Security Group for EC2"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '8443'
+          ToPort: '8443'
+          CidrIp: 0.0.0.0/0
+
+  # RDS security group
+  RDSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: RDS_SecurityGroup
+      GroupDescription: "Security Group for MySQL RDS"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '3306'
+          ToPort: '3306'
+          SourceSecurityGroupName: !Ref EC2SecurityGroup # Sólo permite acceso a las instancias de este grupo
+
+  # S3 bucket
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+
+## Paso 2: Crear un rol con acceso a S3
+  IAMProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref IAMRole
+
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+
+  IAMPolicy:
+    Type: AWS::IAM::Policy
+    DependsOn:
+      - myEC2Instance
+    Properties:
+      PolicyName: myEC2InstancePolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: 's3:*'
+            Resource: '*'
+      Roles:
+        - !Ref IAMRole
+
+# Paso 3: Lanzar las RDS
+  RDSDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: "db.t2.micro"
+      AllocatedStorage: 10
+      AllowMajorVersionUpgrade: false
+      AutoMinorVersionUpgrade: true
+      DBInstanceIdentifier: springaws
+      DBName: springaws
+      Engine: mysql
+      EngineVersion: 8.0
+      MasterUsername: admin
+      MasterUserPassword: !Ref DBPassword
+      MultiAZ: false
+      PubliclyAccessible: true
+      EnableIAMDatabaseAuthentication: true
+      StorageEncrypted: false
+      VPCSecurityGroups:
+        - !GetAtt RDSSecurityGroup.GroupId
+
+  # Paso 4: Lanzar la EC2
+  myEC2Instance:
+    Type: AWS::EC2::Instance
+    DependsOn: RDSDBInstance
+    Properties:
+      IamInstanceProfile: !Ref IAMProfile
+      ImageId: !Ref AmiId
+      InstanceType: "t2.micro"
+      Monitoring: true
+      SecurityGroups:
+        - !Ref EC2SecurityGroup
+      UserData: 
+        Fn::Base64: 
+          Fn::Sub: 
+            - |
+              #!/bin/bash -ex
+              apt-get update && apt-get install -y openjdk-11-jre-headless
+              wget $APP_URL
+              sudo java -jar app.jar -Dspring.profiles.active=production app.jar --server.port=8443 --spring.datasource.url=jdbc:mysql://${RDS_DNS}/events_db --spring.datasource.username=admin --spring.datasource.password= ${RDS_PASS} --amazon.s3.bucket-name= ${BUCKET_NAME} --amazon.s3.endpoint=https://s3.amazonaws.com/${BUCKET_NAME}/ --amazon.s3.region= ${REGION}
+            - RDS_PASS: !Ref DBPassword
+              RDS_NAME: events_db
+              RDS_DNS: !GetAtt RDSDBInstance.Endpoint.Address
+              BUCKET_NAME: !Ref BucketName
+              REGION: !Ref AWS::Region
+              APP_URL: !Ref AppUrl
+
+Outputs:
+  WebSiteURL:
+    Value:
+      !Join
+        - ''
+        - - "https://"
+          - !GetAtt myEC2Instance.PublicDnsName
+          - ":8443/api/events/"
+    Description: "CloudFormation / Web de anuncios"
