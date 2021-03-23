@@ -38,6 +38,8 @@ mvn*
 # Local History for Visual Studio Code
 .history/
 
+data
+
 # node
 node_modules
 build
