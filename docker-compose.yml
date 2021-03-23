@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+
+  server_db:
+    image: mysql:8.0.22
+    env_file:
+      - config.env
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data/server_db:/var/lib/mysql
+
+  mongo_db:
+    image: mongo:latest
+    ports:
+    - 27017-27019:27017-27019
+    env_file:
+    - config.env
+    volumes:
+    - ./data/mongo_db:/data/db
+
+  rabbit_mq:
+    image: rabbitmq:3-management
+    ports:
+    - 5672:5672
+    - 15672:15672
+    volumes:
+    - ./data/rabbit_mq:/var/lib/rabbitmq/mnesia/
+
+  server: 
+    image: urjcmpuchades/server
+    ports:
+    - 3000:3000
+    env_file:
+    - config.env
+    depends_on: 
+    - server_db
+    - rabbit_mq
+    command: ["./wait-for-it.sh", "-t", "60", "server_db:3306", "--", "./wait-for-it.sh", "-t", "60", "rabbit_mq:5672", "--", "node", "src/server.js"]
+    container_name: server
+
+
+  planner: 
+    image: urjcmpuchades/planner
+    env_file:
+    - config.env
+    depends_on:
+    - rabbit_mq
+    - toposervice
+    - weatherservice
+    container_name: planner
+
+
+  weatherservice: 
+    image: urjcmpuchades/weatherservice
+    env_file:
+    - config.env
+    ports:
+    - 9090:9090
+    container_name: weatherservice
+
+
+  toposervice: 
+    image: urjcmpuchades/toposervice
+    ports:
+    - 8080:8080
+    env_file:
+    - config.env
+    depends_on:
+    - mongo_db
+    container_name: toposervice
