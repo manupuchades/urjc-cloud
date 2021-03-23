@@ -6,8 +6,8 @@ const server = new grpc.Server();
 
 server.addService(WeatherService.service, weatherServiceImpl);
 
-server.bind('127.0.0.1:9090', grpc.ServerCredentials.createInsecure());
+server.bind('${process.env.WEATHERSERVICE_HOST}:${process.env.WEATHERSERVICE_PORT}', grpc.ServerCredentials.createInsecure());
 
-console.log('gRPC server running at http://127.0.0.1:9090');
+console.log('gRPC server running at ${process.env.WEATHERSERVICE_HOST}:${process.env.WEATHERSERVICE_PORT}');
 
 server.start();
