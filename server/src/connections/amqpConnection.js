@@ -1,5 +1,4 @@
 import { connect } from 'amqplib';
-import config from 'config';
 import DebugLib from 'debug';
 import configHandler from '../clients/plannerNotificationHandler.js';
 
@@ -9,7 +8,7 @@ export let amqpChannel;
 
 export async function connectAmqp() {
   
-  const URL = config.get('amqp.url');
+  const URL = `amqp://${process.env.AMQP_USER}:${process.env.AMQP_PASS}@${process.env.AMQP_HOST}:${process.env.AMQP_PORT}`;
 
   const conn = await connect(URL);
   amqpChannel = await conn.createChannel();
