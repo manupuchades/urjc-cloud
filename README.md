@@ -2,41 +2,37 @@
 # Modulo III : Aplicaciones nativas en la nube
 
 ## Contenedores y Orquestadores
-* Práctica 1: [Dockerizar una aplicación](https://github.com/manupuchades/urjc-cloud/containers/release/v1.0)
+* Práctica 1: Dockerizar una aplicación
 
 ### EoloPlanner
 
 Este proyecto es una aplicación distribuida formada por diferentes servicios que se comunican entre sí usando API REST, gRPC y RabbitMQ. La aplicación ofrece un interfaz web que se comunica con el servidor con API REST y WebSockets. 
 
-Algunos servicios están implementados con Node.js/Express y otros con Java/Spring. Estas tecnologías deben estar instaladas en el host para poder construir y ejecutar los servicios. También se requiere Docker para ejecutar los servicios auxiliares (MySQL, MongoDB y RabbitMQ).
-
-Para la construcción de los servicios y su ejecución, así como la ejecución de los servicios auxiliares requeridos se usan scripts implementados en Node.js. Posiblemente no sea el lenguaje de scripting más utilizado para este caso de uso, pero en este caso concreto facilita la interoperabilidad en varios SOs y es sencillo.
-
-Esta solución está basada en el trabajo entregado por el alumno Miguel García Sanguino.
+> Cada servicio incluye un .devcontainer que habilita el desarrollo local en contenedores.
 
 ### Iniciar servicios auxiliares: MongoDB, MySQL y RabbitMQ
-
-Los servicios auxiliares se ejecutan con la tecnología de contenedores Docker usando el siguiente comando:
+Los servicios auxiliares se lanzan con el siguiente comando:
 
 ```
-$ node exec_aux_services.js
+$ docker-compose -f docker-compose-dev.yml up
 ```
 
 ### Construir servicios
-
-Descarga las dependencias y construye los proyectos. En proyectos Java usa Maven. En proyectos Node usa NPM:
+Construye los proyectos y los publica en dockerHub.
 
 ```
-$ node build.js
+$ ./build-publish-containers.sh
 ```
 
 ### Ejecutar servicios
 
-Ejecuta los servicios. En proyectos Java usa Maven. En proyectos Node usa esta tecnología directamente:
+Ejecuta los servicios utilizando docker.
 
 ```
-$ node exec.js
+$ docker-compose up
 ```
+
+
 ---
 [Code URJC - Máster Cloud Apps](https://www.codeurjc.es/mastercloudapps/) : Desarrollo y despliegue de aplicaciones en la nube  
 Curso 2020/2021
