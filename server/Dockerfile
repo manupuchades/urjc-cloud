@@ -24,4 +24,4 @@ RUN npm install --only=production
 EXPOSE 3000
 
 # Comando que se ejecuta cuando se arranque el contenedor
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]

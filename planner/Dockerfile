@@ -16,7 +16,7 @@ RUN mvn clean verify --fail-never
 COPY /src /project/src
 
 # Compila proyecto
-RUN mvn package
+RUN mvn clean package
 
 #################################################
 # Imagen base para el contenedor de la aplicación
@@ -28,6 +28,9 @@ WORKDIR /usr/src/app/
 
 # Copia el JAR del contenedor de compilación
 COPY --from=builder /project/target/*.jar /usr/src/app/
+
+# Indica el puerto que expone el contenedor
+EXPOSE 8080
 
 # Comando por defecto
 ENTRYPOINT [ "java", "-jar", "planner-0.0.1-SNAPSHOT.jar" ]

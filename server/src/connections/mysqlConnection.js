@@ -4,9 +4,13 @@ import DebugLib from 'debug';
 
 const debug = new DebugLib('server:mysql');
 
-export default new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+const MYSQL_HOST = process.env.MYSQL_HOST || "localhost";
+const MYSQL_DB = process.env.MYSQL_DB || "eoloplantsDB";
+const MYSQL_USER = process.env.MYSQL_USER || "root";
+const MYSQL_PASS = process.env.MYSQL_PASS || "password";
+
+export default new Sequelize(MYSQL_DB, MYSQL_USER, MYSQL_PASS, {
+    host: MYSQL_HOST,
     dialect: 'mysql',
     dialectModule: mysql2,
     logging: false

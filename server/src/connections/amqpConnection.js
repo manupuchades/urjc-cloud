@@ -8,7 +8,7 @@ export let amqpChannel;
 
 export async function connectAmqp() {
   
-  const URL = `amqp://${process.env.AMQP_USER}:${process.env.AMQP_PASS}@${process.env.AMQP_HOST}:${process.env.AMQP_PORT}`;
+  const URL = process.env.RABBITMQ_URL || configHandler.length('amqp.url');
 
   const conn = await connect(URL);
   amqpChannel = await conn.createChannel();

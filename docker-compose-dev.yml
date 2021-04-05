@@ -1,26 +1,30 @@
 version: "3.9"
 services:
-  server_db:
+  mysql:
     image: mysql:8.0.22
     ports:
-    - 3306:3306
+      - 3306:3306
     environment:
-    - MYSQL_ROOT_PASSWORD=password
-    - MYSQL_DATABASE=eoloplantsDB
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=eoloplantsDB
     volumes:
-    - ./data/server_db:/var/lib/mysql
+      - ./data/mysql_db:/var/lib/mysql
+    restart: always
 
   mongo:
-    image: mongo:latest
+    image: mongo:4.2.13-bionic
     ports:
-    - 27017-27019:27017-27019
+      - 27017-27019:27017-27019
     volumes:
-    - ./data/mongo:/data/db
+      - ./data/mongo_db:/data/db
+    restart: always
+
 
   rabbit_mq:
     image: rabbitmq:3-management
     ports:
-    - 5672:5672
-    - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-    - ./data/rabbit_mq:/var/lib/rabbitmq/mnesia/
+      - ./data/rabbit_mq:/var/lib/rabbitmq/mnesia/
+    restart: always

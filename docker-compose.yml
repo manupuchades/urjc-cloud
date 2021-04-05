@@ -4,69 +4,74 @@ services:
 
   server_db:
     image: mysql:8.0.22
-    env_file:
-      - config.env
+    environment:
+      - MYSQL_DATABASE=eoloplantsDB
+      - MYSQL_ROOT_PASSWORD=password
     ports:
       - 3306:3306
     volumes:
       - ./data/server_db:/var/lib/mysql
+    restart: always
 
-  mongo_db:
-    image: mongo:latest
+  mongodb:
+    image: mongo:4.4-bionic
     ports:
     - 27017-27019:27017-27019
     env_file:
     - config.env
     volumes:
     - ./data/mongo_db:/data/db
+    restart: always
 
-  rabbit_mq:
+  rabbitmq:
     image: rabbitmq:3-management
     ports:
     - 5672:5672
     - 15672:15672
+    env_file:
+      - config.env
     volumes:
-    - ./data/rabbit_mq:/var/lib/rabbitmq/mnesia/
+    - ./data/rabbitmq:/var/lib/rabbitmq
+    restart: always
 
   server: 
-    image: urjcmpuchades/server
+    image: urjcmpuchades/eoloplanner-server:v1.0
     ports:
     - 3000:3000
     env_file:
     - config.env
     depends_on: 
     - server_db
-    - rabbit_mq
-    command: ["./wait-for-it.sh", "-t", "60", "server_db:3306", "--", "./wait-for-it.sh", "-t", "60", "rabbit_mq:5672", "--", "node", "src/server.js"]
-    container_name: server
-
+    - rabbitmq
+    command: ["./wait-for-it.sh", "server_db:3306", "--", "./wait-for-it.sh", "rabbitmq:5672", "--", "node", "src/server.js"]
+    restart: on-failure
 
   planner: 
-    image: urjcmpuchades/planner
+    image: urjcmpuchades/eoloplanner-planner:v1.0
     env_file:
     - config.env
     depends_on:
-    - rabbit_mq
+    - rabbitmq
     - toposervice
     - weatherservice
-    container_name: planner
+    restart: on-failure
 
 
   weatherservice: 
-    image: urjcmpuchades/weatherservice
+    image: urjcmpuchades/eoloplanner-weatherservice:v1.0
     env_file:
     - config.env
     ports:
     - 9090:9090
-    container_name: weatherservice
+    restart: on-failure
 
 
   toposervice: 
-    image: urjcmpuchades/toposervice
+    image: urjcmpuchades/eoloplanner-toposervice:v1.0
     ports:
     - 8080:8080
     env_file:
     - config.env
     depends_on:
-    - mongo_db
-    container_name: toposervice
+    - mongodb
+    restart: on-failure

@@ -10,6 +10,7 @@ public class Application {
     public static void main(String[] args) {
         RetryTemplate template = new RetryTemplate();
         AlwaysRetryPolicy policy = new AlwaysRetryPolicy();
+        
         template.setRetryPolicy(policy);
         template.execute(context -> {
             SpringApplication.run(Application.class, args);

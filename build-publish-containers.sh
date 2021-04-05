@@ -7,29 +7,33 @@ DOCKER_HUB_USER=urjcmpuchades
 
 # server
 echo "Build server..."
-cd server
-docker build . -t $DOCKER_HUB_USER/server
+SERVER_IMAGE_NAME="${DOCKER_HUB_USER}/eoloplanner-server:v1.0"
+docker build -t ${SERVER_IMAGE_NAME} ./server
 
 echo "Publish server..."
-docker push $DOCKER_HUB_USER/server
+docker push ${SERVER_IMAGE_NAME}
 
 # planner
 echo "Build planner..."
-cd ../planner
-docker build . -t $DOCKER_HUB_USER/planner
+PLANNER_IMAGE_NAME="${DOCKER_HUB_USER}/eoloplanner-planner:v1.0"
+docker build -t ${PLANNER_IMAGE_NAME} ./planner
+
 echo "Publish planner..."
-docker push $DOCKER_HUB_USER/planner
+docker push ${PLANNER_IMAGE_NAME}
 
 # toposervice
-echo "Build toposervice..."
-cd ../toposervice
-mvn compile jib:build -Dimage=$DOCKER_HUB_USER/toposervice
-echo "Publish toposervice..."
-docker push $DOCKER_HUB_USER/toposervice
+echo "Build & publish toposervice..."
+TOPOSERVICE_IMAGE_NAME="${DOCKER_HUB_USER}/eoloplanner-toposervice:v1.0"
+
+mvn -f toposervice/ compile jib:build -Dimage=${TOPOSERVICE_IMAGE_NAME}
+
 
 # weatherservice
 echo "Build weatherservice..."
-cd ../weatherservice
-pack build $DOCKER_HUB_USER/weatherservice --path . --builder gcr.io/buildpacks/builder:v1
+WEATHERSERVICE_IMAGE_NAME="${DOCKER_HUB_USER}/eoloplanner-weatherservice:v1.0"
+pack build ${WEATHERSERVICE_IMAGE_NAME} --path ./weatherservice --builder gcr.io/buildpacks/builder:v1
+
 echo "Publish weatherservice..."
-docker push $DOCKER_HUB_USER/weatherservice
+docker push ${WEATHERSERVICE_IMAGE_NAME}
+
+exit 0
