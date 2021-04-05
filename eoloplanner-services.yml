@@ -1,0 +1,110 @@
+# Eoloplanner K8s services
+
+
+# Server
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  labels:
+    app: server
+spec:
+  selector:
+    app: server
+  ports:
+  - name: http
+    port: 3000
+    nodePort: 30000
+  type: NodePort
+---
+
+# Weatherservice
+apiVersion: v1
+kind: Service
+metadata:
+  name: weatherservice
+  labels:
+    app: weatherservice
+spec:
+  selector:
+    app: weatherservice
+  ports:
+  - port: 9090
+  type: ClusterIP
+---
+
+# Planner
+apiVersion: v1
+kind: Service
+metadata:
+  name: planner
+  labels:
+    app: planner
+spec:
+  selector:
+    app: planner
+  ports:
+  - port: 9091
+  type: ClusterIP
+---
+
+# Toposervice 
+apiVersion: v1
+kind: Service
+metadata:
+  name: toposervice
+  labels:
+    app: toposervice
+spec:
+  selector:
+    app: toposervice
+  ports:
+  - port: 8080
+  type: ClusterIP
+---
+
+  # MySQL 
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: mysql
+  ports:
+  - port: 3306
+  type: ClusterIP
+---
+
+# Mongo DB
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+  - name: port-27017
+    port: 27017
+  - name: port-27018
+    port: 27018
+  - name: port-27019
+    port: 27019
+  type: ClusterIP
+---
+
+# RabbitMQ
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+  - name: queue
+    port: 5672
+  - name: console
+    port: 15672
+  type: ClusterIP
