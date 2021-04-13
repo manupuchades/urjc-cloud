@@ -1,0 +1,81 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-pvc
+spec:
+  storageClassName: mysql-storage
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mysql-persistance
+spec:
+  storageClassName: mysql
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: data/db/mysql
+    type: DirectoryOrCreate
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  storageClassName: mongodb-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-persistance
+spec:
+  storageClassName: mongodb-storage
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: data/db/mongo
+    type: DirectoryOrCreate
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: rabbit-pvc
+spec:
+  storageClassName: rabbit-storage
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: rabbit-persistance
+spec:
+  storageClassName: rabbit-storage
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: /data/amqp/rabbitmq
+    type: DirectoryOrCreate

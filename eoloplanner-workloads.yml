@@ -16,9 +16,14 @@ spec:
       labels:
         app: server
     spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
       containers:
       - name: server
         image: oscarsotosanchez/server:v1.0
+        securityContext:
+          allowPrivilegeEscalation: false
         env:
         - name: MYSQL_HOST
           value: mysql
@@ -47,9 +52,14 @@ spec:
       labels:
         app: weatherservice
     spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
       containers:
       - name: weatherservice
         image: oscarsotosanchez/weatherservice:v1.0
+        securityContext:
+          allowPrivilegeEscalation: false
         env:
         - name: GRPC_HOST
           value: 0.0.0.0
@@ -72,9 +82,14 @@ spec:
       labels:
         app: planner
     spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
       containers:
       - name: planner
         image: oscarsotosanchez/planner:v1.0
+        securityContext:
+          allowPrivilegeEscalation: false
         env:
         - name: TOPO_HOST
           value: toposervice
@@ -108,9 +123,14 @@ spec:
       labels:
         app: toposervice
     spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
       containers:
       - name: toposervice
         image: oscarsotosanchez/toposervice:v1.0
+        securityContext:
+          allowPrivilegeEscalation: false
         env:
         - name: SPRING_DATA_MONGODB_HOST
           value: mongodb
@@ -151,6 +171,13 @@ spec:
           value: eoloplantsDB
         - name: MYSQL_ROOT_PASSWORD
           value: password
+        volumeMounts:
+          - name: mysql-volume
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-volume
+          persistentVolumeClaim:
+            claimName: mysql-pvc
 ---
 
 # Mongo DB
@@ -178,6 +205,13 @@ spec:
           value: root
         - name: MONGO_INITDB_ROOT_PASSWORD
           value: password
+        volumeMounts:
+          - name: mongo-volume
+            mountPath: /data/db
+      volumes:
+        - name: mongo-volume
+          persistentVolumeClaim:
+            claimName: mongo-pvc
 ---
 
 # RabbitMQ
@@ -203,4 +237,11 @@ spec:
           value: root
         - name: RABBITMQ_DEFAULT_PASS
           value: password
+        volumeMounts:
+          - name: rabbit-volume
+            mountPath: /var/lib/rabbitmq/mnesia
+      volumes:
+        - name: rabbit-volume
+          persistentVolumeClaim:
+            claimName: rabbit-pvc
 ---

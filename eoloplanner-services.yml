@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: server
+  name: server-service
   labels:
     app: server
 spec:
@@ -14,15 +14,16 @@ spec:
   ports:
   - name: http
     port: 3000
-    nodePort: 30000
-  type: NodePort
+    targetPort: 3000
+    protocol: TCP
+  type: ClusterIP
 ---
 
 # Weatherservice
 apiVersion: v1
 kind: Service
 metadata:
-  name: weatherservice
+  name: weatherservice-service
   labels:
     app: weatherservice
 spec:
@@ -37,7 +38,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: planner
+  name: planner-service
   labels:
     app: planner
 spec:
@@ -52,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: toposervice
+  name: toposervice-service
   labels:
     app: toposervice
 spec:
@@ -60,6 +61,9 @@ spec:
     app: toposervice
   ports:
   - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: rest
   type: ClusterIP
 ---
 
@@ -67,7 +71,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: mysql-service
 spec:
   selector:
     app: mysql
@@ -80,7 +84,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: mongodb-service
 spec:
   selector:
     app: mongodb
@@ -98,7 +102,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbitmq
+  name: rabbitmq-service
 spec:
   selector:
     app: rabbitmq
