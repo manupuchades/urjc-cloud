@@ -24,8 +24,10 @@ para aceptar peticiones. Caos testing con chaos-pod-monkey.
 Para ello:
 
 Modificamos la aplicacion de gatos:
-* Añadimos hazelcast y spring session al pom
-* Creamos una nueva imagen de la aplicacion   
+* Añadimos hazelcast, hazelcast-kubernetes y spring session al pom
+* Se modifica la ruta de la imagen a publicar por jib en el pom
+* Se incluye el nuevo fichero de propiedades hazelcast.yaml en src/resouces
+* Creamos una nueva imagen de la aplicacion:
 `mvn package -DskipTests`
 
 * Modificamos el webapp.yaml para que apunte a la nueva imagen de la aplicación
@@ -36,7 +38,6 @@ Arrancamos la aplicación con minikube en virtualbox:
 `$ kubectl apply -f https://raw.githubusercontent.com/hazelcast/hazelcast-kubernetes/master/rbac.yaml`   
 `$ kubectl apply -f k8s/webapp.yaml`   
 `$ minikube service webapp`
-
 
 Lanzamos los tests en local para verificar que la sesión es compartida:
 `mvn test -Dweburl=http://192.168.99.103:32110`
