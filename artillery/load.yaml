@@ -1,0 +1,14 @@
+config:
+  target: "http://192.168.99.103:32164/"
+  tls:
+    rejectUnauthorized: false
+  phases:
+    - arrivalRate: 20 
+      duration: 60
+  http:
+    pool: 10
+scenarios:
+  - name: "Load test"
+    flow:
+      - get:
+            url: "/"
