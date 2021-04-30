@@ -40,7 +40,7 @@ Arrancamos la aplicación con minikube en virtualbox:
 `$ kubectl apply -f k8s/webapp.yaml`   
 `$ minikube service webapp`
 
-Lanzamos los tests en local para verificar que la sesión es compartida:
+Lanzamos los tests en local para verificar que la sesión es compartida:   
 `mvn test -Dweburl=http://192.168.99.103:32110`
 
 
@@ -51,7 +51,7 @@ Lanzamos los tests en local para verificar que la sesión es compartida:
 Reducimos el numero de réplicas del pod:   
 ` $ kubectl scale deployments/webapp --replicas=1 `   
 Ejecutamos el escenario de carga:   
-`$ artillery run --output load-test/resultados-test-1.json artillery/load.yml `
+`$ artillery run --output load-test/resultados-test-1.json artillery/load.yaml `
 
 
 > Escenario 2: Un único pod en el deployment. Caos testing con
