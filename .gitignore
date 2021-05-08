@@ -23,6 +23,7 @@
 hs_err_pid*
 
 # maven
+.mvn/
 target
 log
 mvn*
