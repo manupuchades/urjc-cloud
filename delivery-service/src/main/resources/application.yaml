@@ -1,0 +1,24 @@
+server:
+  port: 8084
+
+
+spring:
+  application:
+    name: delivery-service
+
+  datasource:
+    username: root
+    password: password
+    url: jdbc:mysql://localhost:3306/test
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect

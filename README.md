@@ -25,32 +25,32 @@ en un pedido concreto, también deberá llevar información de la ruta.
 
 ## Ejecución
 
-* Arranque de mysql y kafka
+* Arranque de mysql y kafka   
 `
 docker-compose -f docker-compose-mysql.yaml up
 `
 
-* Parada de mysql y Kafka
+* Parada de mysql y Kafka   
 `
 docker-compose -f docker-compose-mysql.yaml down
 `
 
-* Terminal en gateway-service
+* Terminal en gateway-service   
 `
 mvn spring-boot:run
 `
 
-* Terminal en order-service
+* Terminal en order-service   
 `
 mvn spring-boot:run
 `
 
-* Terminal en inventory-service
+* Terminal en inventory-service   
 `
 mvn spring-boot:run
 `
 
-* Terminal en customer-service
+* Terminal en customer-service   
 `
 mvn spring-boot:run
 `
