@@ -70,13 +70,14 @@ GET state order (id) devuelve el estado del pedido
 GET order completo /orders/{orderId}/products/{productId}
 POST order (orderTotal, customerId, productName, productReference, quantity), en este caso se solicita la ejecución de la saga del pedido.
 
-Varios escenarios posibles:
+### Varios escenarios posibles:
 
-# orderState    rejectionReason    comentario
-  APPROVED                             el pedido cumple con todos los requisitos del sistema
-  REJECTED        SOLD_OUT             el pedido se ha solicitado con un producto que no existe en el inventario o que la cantidad solicitada excede la que hay en el stock.
-  REJECTED        UNKNOWN_CUSTOMER     el pedido se ha solicitado por un cliente que no existe en el sistema.   
-  REJECTED        INSUFFICIENT_CREDIT  el pedido se ha solicitado por un total que excede el credito limite del cliente 
+| orderState |   rejectionReason        |  comentario                                                                                                                                |
+|------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+|  APPROVED  |                          | el pedido cumple con todos los requisitos del sistema                                                                                      |
+|  REJECTED  |      SOLD_OUT            | el pedido se ha solicitado con un producto que no existe en el inventario o que la cantidad solicitada excede la que hay en el stock.      |
+|  REJECTED  |      UNKNOWN_CUSTOMER    | el pedido se ha solicitado por un cliente que no existe en el sistema.                                                                     |
+|  REJECTED  |      INSUFFICIENT_CREDIT | el pedido se ha solicitado por un total que excede el credito limite del cliente                                                           |
 
 ---
 [Code URJC - Máster Cloud Apps](https://www.codeurjc.es/mastercloudapps/) : Desarrollo y despliegue de aplicaciones en la nube  
