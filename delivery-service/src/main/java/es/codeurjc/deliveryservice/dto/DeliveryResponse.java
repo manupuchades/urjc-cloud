@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import types.DeliveryStatusEnum;
 
 import java.sql.Timestamp;
 
@@ -19,8 +18,6 @@ public class DeliveryResponse {
     private String route;
 
     private City city;
-
-    private DeliveryStatusEnum state;
 
     private Timestamp createdDate;
 
