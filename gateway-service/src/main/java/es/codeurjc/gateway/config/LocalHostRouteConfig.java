@@ -30,6 +30,12 @@ public class LocalHostRouteConfig {
         		.route(r -> r.path("/api/v1/customers/**")
         				.filters(f -> f.rewritePath("/api/v1/customers/(?<segment>.*)", "/api/v1/customers/${segment}"))
         				.uri("http://localhost:8082"))
+                .route(r -> r.path("/api/v1/deliveries/**")
+                        .filters(f -> f.rewritePath("/api/v1/deliveries/(?<segment>.*)", "/api/v1/deliveries/${segment}"))
+                        .uri("http://localhost:8084"))
+                .route(r -> r.path("/api/v1/cities/**")
+                        .filters(f -> f.rewritePath("/api/v1/cities/(?<segment>.*)", "/api/v1/cities/${segment}"))
+                        .uri("http://localhost:8084"))
                 .build();
     }
     
