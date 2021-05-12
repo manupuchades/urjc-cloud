@@ -23,7 +23,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 @DisplayName("Functional REST API tests")
 class ApiRestTestApplicationTests {
 
-    static final String SUCCESFUL_STATUS = "APPROVED";
+    static final String SUCCESSFUL_STATUS = "APPROVED";
     static final String FAILURE_STATUS = "REJECTED";
 
     static final String CREDIT_REJECTION = "INSUFFICIENT_CREDIT";
@@ -35,8 +35,6 @@ class ApiRestTestApplicationTests {
     Response customer;
     Response product;
     Response city;
-
-    //  + RandomStringUtils.randomAlphabetic(10)
 
     @BeforeAll
     void setUp() throws Exception {
@@ -90,7 +88,7 @@ class ApiRestTestApplicationTests {
         responseOrderState
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("orderState", equalTo(SUCCESFUL_STATUS));
+                .body("orderState", equalTo(SUCCESSFUL_STATUS));
     }
 
     @Test
