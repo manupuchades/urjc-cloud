@@ -10,7 +10,6 @@ public class DeliveryMapper {
                 .id(delivery.getId())
                 .city(delivery.getCity())
                 .route(delivery.getRoute())
-                .state(delivery.getState())
                 .createdDate(delivery.getCreatedDate())
                 .lastModifiedDate(delivery.getLastModifiedDate())
                 .build();

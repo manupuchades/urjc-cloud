@@ -25,6 +25,7 @@
         <module>customer-service</module>
         <module>inventory-service</module>
         <module>gateway-service</module>
+		<module>delivery-service</module>
     </modules>
 
 	<dependencyManagement>

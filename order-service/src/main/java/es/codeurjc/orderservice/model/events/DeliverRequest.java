@@ -1,6 +1,6 @@
-package es.codeurjc.deliveryservice.model.events;
+package es.codeurjc.orderservice.model.events;
 
-import es.codeurjc.deliveryservice.model.events.dto.OrderDto;
+import es.codeurjc.orderservice.model.events.dto.OrderDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

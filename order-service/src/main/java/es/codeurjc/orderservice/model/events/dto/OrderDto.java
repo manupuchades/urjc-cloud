@@ -20,7 +20,13 @@ public class OrderDto {
     
     @JsonProperty("quantity")
     private Integer quantity;
-    
+
+    @JsonProperty("deliveryId")
+    private UUID deliveryId;
+
+    @JsonProperty("cityId")
+    private UUID cityId;
+
     @JsonIgnore
     private OrderStatusEnum state;
     
@@ -42,6 +48,14 @@ public class OrderDto {
 
     public OrderStatusEnum getState() {
         return state;
+    }
+
+    public UUID getDeliveryId() {
+        return deliveryId;
+    }
+
+    public UUID getCityId() {
+        return cityId;
     }
 
     public static final class Builder {
@@ -74,6 +88,16 @@ public class OrderDto {
 
         public Builder withState(OrderStatusEnum value) {
             object.state = value;
+            return this;
+        }
+
+        public Builder withDeliveryId(UUID deliveryId) {
+            object.deliveryId = deliveryId;
+            return this;
+        }
+
+        public Builder withCityId(UUID cityId) {
+            object.cityId = cityId;
             return this;
         }
 

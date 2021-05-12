@@ -1,5 +1,6 @@
 package es.codeurjc.orderservice.stream.kafka;
 
+import es.codeurjc.orderservice.model.events.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,6 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 
-import es.codeurjc.orderservice.model.events.AllocateRequest;
-import es.codeurjc.orderservice.model.events.CreditRequest;
-import es.codeurjc.orderservice.model.events.DeallocateRequest;
 import es.codeurjc.orderservice.model.events.dto.OrderDetailsDto;
 import es.codeurjc.orderservice.model.events.dto.OrderDto;
 
@@ -64,5 +62,29 @@ public class OrderStreamService {
                 .withPayload(creditRequest)
                 .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
                 .build());
+	}
+
+	public void sendDeliverRequest(final OrderDto orderDto) {
+		log.info("Sending orderDto {}", orderDto);
+		final DeliverRequest deliverRequest = DeliverRequest.builder()
+				.order(orderDto)
+				.build();
+		MessageChannel messageChannel = orderStream.outboundDeliverOrder();
+		messageChannel.send(MessageBuilder
+				.withPayload(deliverRequest)
+				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+				.build());
+	}
+
+	public void sendDedeliverRequest(final OrderDto orderDto) {
+		log.info("Sending orderDto {}", orderDto);
+		final DedeliverRequest dedeliverRequest = DedeliverRequest.builder()
+				.order(orderDto)
+				.build();
+		MessageChannel messageChannel = orderStream.outboundDeallocateOrder();
+		messageChannel.send(MessageBuilder
+				.withPayload(dedeliverRequest)
+				.setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+				.build());
 	}
 }

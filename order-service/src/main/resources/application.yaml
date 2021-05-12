@@ -66,6 +66,26 @@ spring:
           group: ordering
           producer:
             partition-count: 3
+        deliver-order-request:
+          destination: deliver-order-request
+          contentType: application/json
+          group: ordering
+          producer:
+            partition-count: 3
+        deliver-order-response:
+          destination: deliver-order-response
+          contentType: application/json
+          group: ordering
+          consumer:
+            partitioned: true
+            concurrency: 3
+            auto.offset.reset: earliest
+        dedeliver-order-request:
+          destination: undeliver-order-request
+          contentType: application/json
+          group: ordering
+          producer:
+            partition-count: 3
 
   kafka:
     bootstrap-servers: localhost:9092            

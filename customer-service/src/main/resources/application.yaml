@@ -31,14 +31,22 @@ spring:
           autoAddPartitions: true
           minPartitionCount: 3
       bindings:
-        credit-order-response:
-          destination: credit-order-response
+        deliver-order-response:
+          destination: deliver-order-response
           contentType: application/json
           group: ordering
           producer:
             partition-count: 3
-        credit-order-request:
-          destination: credit-order-request
+        deliver-order-request:
+          destination: deliver-order-request
+          contentType: application/json
+          group: ordering
+          consumer:
+            partitioned: true
+            concurrency: 3
+            auto.offset.reset: earliest
+        dedeliver-order-request:
+          destination: dedeliver-order-request
           contentType: application/json
           group: ordering
           consumer:

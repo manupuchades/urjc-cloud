@@ -89,9 +89,12 @@ public class Order {
 		this.state = state;
 	}
 
-
 	public OrderDetails getOrderDetails() {
         return orderDetails;
+    }
+
+    public void setOrderDetails(OrderDetails orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public String getName() {
@@ -113,7 +116,6 @@ public class Order {
     public void setRejectionReason(RejectionReasonEnum rejectionReason) {
 		this.rejectionReason = rejectionReason;
 	}
-
     
 	public Timestamp getCreatedDate() {
 		return createdDate;
@@ -122,8 +124,6 @@ public class Order {
 	public Timestamp getLastModifiedDate() {
 		return lastModifiedDate;
 	}
-
-
 
 	public static final class Builder {
 

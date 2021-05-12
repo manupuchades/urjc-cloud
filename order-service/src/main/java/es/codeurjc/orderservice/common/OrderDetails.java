@@ -1,61 +1,40 @@
 package es.codeurjc.orderservice.common;
 
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import java.util.UUID;
 
-import org.hibernate.annotations.Type;
-
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Embeddable
 public class OrderDetails {
 
-  @Type(type="org.hibernate.type.UUIDCharType")
-  @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
-  private UUID customerId;
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID customerId;
 
-  @Embedded
-  private Money orderTotal;
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar(36)")
+    private UUID deliveryId;
 
-  public OrderDetails() {
-  }
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar(36)")
+    private UUID cityId;
 
-  public OrderDetails(UUID customerId, Money orderTotal) {
-    this.customerId = customerId;
-    this.orderTotal = orderTotal;
-  }
+    @Embedded
+    private Money orderTotal;
 
-  public UUID getCustomerId() {
-      return customerId;
-  }
+    public void setDeliveryId(UUID deliveryId) {
+        this.deliveryId = deliveryId;
+    }
 
-  public Money getOrderTotal() {
-      return orderTotal;
-  }
-
-  public static final class Builder {
-
-      private final OrderDetails object;
-
-      public Builder() {
-          object = new OrderDetails();
-      }
-
-      public Builder withCustomerId(UUID value) {
-          object.customerId = value;
-          return this;
-      }
-
-      public Builder withOrderTotal(Money value) {
-          object.orderTotal = value;
-          return this;
-      }
-
-      public OrderDetails build() {
-          return object;
-      }
-
-  }
-  
 }

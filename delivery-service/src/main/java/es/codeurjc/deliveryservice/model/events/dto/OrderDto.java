@@ -2,16 +2,13 @@ package es.codeurjc.deliveryservice.model.events.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
 @Builder
-@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDto {
 	
     @JsonProperty("id")

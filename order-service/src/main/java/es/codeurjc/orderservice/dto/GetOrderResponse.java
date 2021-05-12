@@ -1,46 +1,26 @@
 package es.codeurjc.orderservice.dto;
 
 
-import java.util.UUID;
-
 import es.codeurjc.orderservice.types.OrderStatusEnum;
 import es.codeurjc.orderservice.types.RejectionReasonEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.UUID;
+
+
+@Getter
+@Setter
+@AllArgsConstructor
+@Builder
 public class GetOrderResponse {
-  private UUID orderId;
-  private OrderStatusEnum orderState;
-  private RejectionReasonEnum rejectionReason;
 
-  public GetOrderResponse() {
-  }
+    private UUID orderId;
+    private UUID cityId;
+    private UUID deliveryId;
+    private OrderStatusEnum orderState;
+    private RejectionReasonEnum rejectionReason;
 
-  public GetOrderResponse(UUID orderId, OrderStatusEnum orderState, RejectionReasonEnum rejectionReason) {
-    this.orderId = orderId;
-    this.orderState = orderState;
-    this.rejectionReason = rejectionReason;
-  }
-
-  public UUID getOrderId() {
-    return orderId;
-  }
-
-  public void setOrderId(UUID orderId) {
-    this.orderId = orderId;
-  }
-
-  public OrderStatusEnum getOrderState() {
-    return orderState;
-  }
-
-  public void setOrderState(OrderStatusEnum orderState) {
-    this.orderState = orderState;
-  }
-
-  public RejectionReasonEnum getRejectionReason() {
-    return rejectionReason;
-  }
-
-  public void setRejectionReason(RejectionReasonEnum rejectionReason) {
-    this.rejectionReason = rejectionReason;
-  }
 }

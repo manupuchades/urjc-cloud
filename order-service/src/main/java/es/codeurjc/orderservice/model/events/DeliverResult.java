@@ -1,4 +1,4 @@
-package es.codeurjc.deliveryservice.model.events;
+package es.codeurjc.orderservice.model.events;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliverResult {
-	
+
     private UUID orderId;
 
     private Boolean isValid;

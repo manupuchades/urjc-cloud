@@ -9,21 +9,18 @@ import es.codeurjc.deliveryservice.model.events.dto.OrderDto;
 import es.codeurjc.deliveryservice.repository.CityRepository;
 import es.codeurjc.deliveryservice.repository.DeliveryRepository;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
 public class DeliveryService implements IDeliveryService{
-
-    private Logger log = LoggerFactory.getLogger(DeliveryService.class);
 
     DeliveryRepository deliveryRepository;
     CityRepository cityRepository;
@@ -35,7 +32,7 @@ public class DeliveryService implements IDeliveryService{
     }
 
     @Override
-    public Boolean deliverOrder(OrderDto orderDto) {
+    public Optional<Delivery> deliverOrder(OrderDto orderDto) {
         log.debug("Delivering OrderId: " + orderDto.getId());
         Optional<City> optionalCity = cityRepository.findById(orderDto.getCityId());
         if (optionalCity.isPresent()) {
@@ -45,18 +42,18 @@ public class DeliveryService implements IDeliveryService{
                 City savedCity = cityRepository.saveAndFlush(city);
                 log.debug("Updated City with city id: " + savedCity.getId());
 
-                Delivery delivery = Delivery.builder()
-                        .city(city)
-                        .route(routeService.getRoute(city.getName()))
+                Delivery delivery = new Delivery.Builder()
+                        .withCity(city)
+                        .withRoute(routeService.getRoute(city.getName()))
                         .build();
 
                 Delivery savedDelivery = deliveryRepository.save(delivery);
                 log.debug("Saved Delivery with delivery id: " + savedDelivery.getId());
 
-                return Boolean.TRUE;
+                return Optional.of(savedDelivery);
             }
         }
-        return Boolean.FALSE;
+        return Optional.empty();
     }
 
     @Override

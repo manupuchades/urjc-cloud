@@ -68,7 +68,7 @@ public class OrderManager {
 
 				Order validatedOrder = orderRepository.findById(orderId).get();
 
-				sendOrderEvent(validatedOrder, OrderEventEnum.RESERVE_CREDIT);
+				sendOrderEvent(validatedOrder, OrderEventEnum.DELIVER_ORDER);
 
 			} else {
 				sendOrderEvent(order, OrderEventEnum.ALLOCATION_FAILED);
@@ -91,6 +91,30 @@ public class OrderManager {
 
 			} else {
 				sendOrderEvent(order, OrderEventEnum.CREDIT_REJECTED);
+			}
+		}, () -> log.error("Order Not Found. Id: " + orderId));
+	}
+
+	public void processDeliverResult(UUID orderId, Boolean isValid, String rejectionReason) {
+
+		log.debug("Process Deliver Result for orderId: " + orderId
+				+ " Valid? " + isValid + " Reason? " + rejectionReason);
+
+		Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+		orderOptional.ifPresentOrElse(order -> {
+			if (isValid) {
+				sendOrderEvent(order, OrderEventEnum.DELIVERY_SUCCESS);
+
+				// wait for status change
+				awaitForStatus(orderId, OrderStatusEnum.DELIVERED);
+
+				Order validatedOrder = orderRepository.findById(orderId).get();
+
+				sendOrderEvent(validatedOrder, OrderEventEnum.RESERVE_CREDIT);
+
+			} else {
+				sendOrderEvent(order, OrderEventEnum.DELIVERY_FAILED);
 			}
 		}, () -> log.error("Order Not Found. Id: " + orderId));
 	}
