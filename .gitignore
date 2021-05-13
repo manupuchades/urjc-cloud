@@ -22,14 +22,25 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# eclipse
-target
-.settings
-.gitignore
+# maven
 .mvn/
+target
+log
+mvn*
+
+# nested git
+.gitignore
+
+# eclipse
+.settings
 .classpath
 .project
-mvn*
+
+# intelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
 
 # vscode
 .vscode/*
@@ -43,4 +54,6 @@ node_modules
 build
 npm-debug.log
 .env
-.DS_Store
+
+# kafka
+zk-single-kafka-single
