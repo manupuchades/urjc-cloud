@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>es.codeurjc.mca</groupId>
-	<artifactId>practica2.1.2-books_v2</artifactId>
+	<artifactId>monolith-to-microservices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>databases</name>
-	<description>Practice 2. Databases</description>
+	<name>the-bookshelf</name>
+	<description>Release 2: from monolith to microservices</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
