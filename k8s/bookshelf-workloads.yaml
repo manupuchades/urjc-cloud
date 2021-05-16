@@ -1,0 +1,134 @@
+# The Bookshelf K8s workloads
+
+
+# Bookshelf monolith
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookshelf-monolith
+spec:
+  selector:
+    matchLabels:
+      app: bookshelf-monolith
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookshelf-monolith
+    spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
+      containers:
+        - name: bookshelf-monolith
+          image: urjcmpuchades/bookshelf-monolith:v1.0
+          securityContext:
+            allowPrivilegeEscalation: false
+          env:
+            - name: MYSQL_HOST
+              value: bookshelf-monolith-db
+            - name: MYSQL_DB
+              value: bookshelf-monolith-db
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASS
+              value: password
+---
+
+# User service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  selector:
+    matchLabels:
+      app: user-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      securityContext:
+        runAsUser: 1000
+      restartPolicy: Always
+      containers:
+        - name: user-service
+          image: urjcmpuchades/user-service:v1.0
+          securityContext:
+            allowPrivilegeEscalation: false
+          env:
+            - name: MYSQL_HOST
+              value: user-service-db
+            - name: MYSQL_DB
+              value: user-service-db
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASS
+              value: password
+---
+
+# MySQL Bookshelf Monolith DB
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookshelf-monolith-db
+spec:
+  selector:
+    matchLabels:
+      app: bookshelf-monolith-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bookshelf-monolith-db
+    spec:
+      containers:
+        - name: bookshelf-monolith-db
+          image: mysql:5.7
+          env:
+            - name: MYSQL_DATABASE
+              value: bookshelf-monolith-db
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          volumeMounts:
+            - name: bookshelf-monolith-db-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: bookshelf-monolith-db-volume
+          persistentVolumeClaim:
+            claimName: bookshelf-monolith-db-pvc
+
+---
+
+# MySQL User Service DB
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-db
+spec:
+  selector:
+    matchLabels:
+      app: user-service-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service-db
+    spec:
+      containers:
+        - name: user-service-db
+          image: mysql:5.7
+          env:
+            - name: MYSQL_DATABASE
+              value: user-service-db
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          volumeMounts:
+            - name: user-service-db-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: user-service-db-volume
+          persistentVolumeClaim:
+            claimName: user-service-db-pvc

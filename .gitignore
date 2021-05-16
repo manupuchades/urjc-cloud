@@ -27,33 +27,50 @@ hs_err_pid*
 target
 log
 mvn*
+target/
 
-# nested git
-.gitignore
-
-# eclipse
-.settings
+### STS ###
+.apt_generated
 .classpath
+.factorypath
 .project
+.settings
+.springBeans
+.sts4-cache
 
-# intelliJ
-.idea/
+### IntelliJ IDEA ###
+.idea
 *.iws
 *.iml
 *.ipr
 
-# vscode
-.vscode/*
+### eclipse ###
+.settings
+.classpath
+.project
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# nested git
+.gitignore
+
+### VS Code ###
+.vscode/
 *.code-workspace
 
-# Local History for Visual Studio Code
+### Local History for Visual Studio Code ###
 .history/
 
-# node
+### node ###
 node_modules
 build
 npm-debug.log
 .env
-
-# kafka
-zk-single-kafka-single

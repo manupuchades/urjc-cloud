@@ -1,0 +1,38 @@
+# The Bookshelf K8s services
+
+
+# Bookshelf monolith
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf-monolith-service
+  labels:
+    app: bookshelf-monolith
+spec:
+  selector:
+    app: bookshelf-monolith
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  type: ClusterIP
+---
+
+# User service
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-service
+  labels:
+    app: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - name: http
+      port: 3100
+      targetPort: 3100
+      protocol: TCP
+  type: ClusterIP
+---

@@ -1,0 +1,52 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: bookshelf-monolith-db-pvc
+spec:
+  storageClassName: bookshelf-monolith-db-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: bookshelf-monolith-db-persistance
+spec:
+  storageClassName: bookshelf-monolith-db-storage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: data/db/monolith-db-storage
+    type: DirectoryOrCreate
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: user-service-db-pvc
+spec:
+  storageClassName: user-service-db-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: user-service-db-persistance
+spec:
+  storageClassName: user-service-db-storage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: data/db/user-service-db-storage
+    type: DirectoryOrCreate
+---
