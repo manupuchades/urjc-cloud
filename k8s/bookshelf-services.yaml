@@ -36,3 +36,28 @@ spec:
       protocol: TCP
   type: ClusterIP
 ---
+
+# MySQL Bookshelf Monolith DB
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf-monolith-db-service
+spec:
+  selector:
+    app: bookshelf-monolith-db
+  ports:
+    - port: 3306
+  type: ClusterIP
+  ---
+
+  # MySQL User Service DB
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: user-service-db-service
+  spec:
+    selector:
+      app: user-service-db
+    ports:
+      - port: 3308
+    type: ClusterIP

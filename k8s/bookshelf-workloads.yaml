@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: bookshelf-monolith
-          image: urjcmpuchades/bookshelf-monolith:v1.0
+          image: urjcmpuchades/mca-bookshelf-monolith:v1.0
           securityContext:
             allowPrivilegeEscalation: false
           env:
@@ -55,7 +55,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: user-service
-          image: urjcmpuchades/user-service:v1.0
+          image: urjcmpuchades/mca-user-service:v1.0
           securityContext:
             allowPrivilegeEscalation: false
           env:
@@ -125,6 +125,9 @@ spec:
               value: user-service-db
             - name: MYSQL_ROOT_PASSWORD
               value: password
+          ports:
+            - containerPort: 3308
+              name: user-service-db
           volumeMounts:
             - name: user-service-db-volume
               mountPath: /var/lib/mysql
