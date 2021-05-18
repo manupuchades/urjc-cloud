@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.validation.Valid;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,14 +30,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Profile("monolith")
 public class UserController {
 
     private UserService userService;
-    private CommentService commentService;
 
-    public UserController(UserService userService, CommentService commentService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.commentService = commentService;
     }
 
     @Operation(summary = "Get all users")
@@ -114,17 +114,6 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public UserResponseDto deleteUser(@Parameter(description = "id of user to be deleted") @PathVariable long userId) {
         return this.userService.delete(userId);
-    }
-
-    @Operation(summary = "Get all user's comments")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Found all user's comments",
-                    content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserCommentResponseDto.class)))})})
-    @GetMapping("/{userId}/comments")
-    public Collection<UserCommentResponseDto> getUserComments(@Parameter(description = "id of user to get comments")
-                                                              @PathVariable long userId) {
-        return this.commentService.getComments(userId);
     }
 
 }

@@ -10,6 +10,7 @@ import es.codeurjc.mca.userservice.models.User;
 import es.codeurjc.mca.userservice.repositories.UserRepository;
 import es.codeurjc.mca.userservice.services.CommentService;
 import es.codeurjc.mca.userservice.services.UserService;
+import lombok.AllArgsConstructor;
 import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,12 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private Mapper mapper;
     private CommentService commentService;
     private UserRepository userRepository;
-
-    public UserServiceImpl(Mapper mapper, UserRepository userRepository) {
-         this.mapper = mapper;
-         this.userRepository = userRepository;
-    }
 
     public Collection<UserResponseDto> findAll() {
         return this.userRepository.findAll().stream()
@@ -45,6 +42,11 @@ public class UserServiceImpl implements UserService {
 
     public UserResponseDto findById(long userId) {
         User user = this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return this.mapper.map(user, UserResponseDto.class);
+    }
+
+    public UserResponseDto findByNick(String nick) {
+        User user = this.userRepository.findByNick(nick).orElseThrow(UserNotFoundException::new);
         return this.mapper.map(user, UserResponseDto.class);
     }
 

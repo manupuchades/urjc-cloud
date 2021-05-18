@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Collection;
 
-@FeignClient(name = "comments" ,url = "http://${monolith.host}:${monolith.port}/api/v1")
+@FeignClient(name = "bookshelf-monolith" ,url = "http://${bookshelf-monolith.host}:${bookshelf-monolith.port}/api/v1")
 public interface CommentClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/users/{userId}/comments")

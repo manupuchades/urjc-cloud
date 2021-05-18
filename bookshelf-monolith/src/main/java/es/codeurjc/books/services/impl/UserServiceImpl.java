@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.dozer.Mapper;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import es.codeurjc.books.dtos.requests.UpdateUserEmailRequestDto;
@@ -19,6 +20,7 @@ import es.codeurjc.books.repositories.UserRepository;
 import es.codeurjc.books.services.UserService;
 
 @Service
+@Profile("monolith")
 public class UserServiceImpl implements UserService {
 
     private Mapper mapper;

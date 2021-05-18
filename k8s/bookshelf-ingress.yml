@@ -7,21 +7,21 @@ spec:
     - host: the-bookshelf
       http:
         paths:
-          - path: /books/(.*)
+          - path: /api/v1//books/(.*)
             pathType: Prefix
             backend:
               service:
                 name: bookshelf-monolith-service
                 port:
                   number: 3000
-          - path: users/(.*)/books
+          - path: /api/v1/users/(.*)/comments
             pathType: Prefix
             backend:
               service:
                 name: bookshelf-monolith-service
                 port:
                   number: 3000
-          - path: /users/(.*)
+          - path: /api/v1/users/(.*)
             pathType: Prefix
             backend:
               service:

@@ -52,6 +52,21 @@ public class UserController {
         return this.userService.findById(userId);
     }
 
+    @Operation(summary = "Get a user by its nick")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the user",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponseDto.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid format id supplied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found",
+                    content = @Content)})
+    @GetMapping("")
+    public UserResponseDto getUser(@Parameter(description = "nick of user to be searched")
+                                   @RequestParam String nick) {
+        return this.userService.findByNick(nick);
+    }
+
     @Operation(summary = "Create a new user")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "User to be created", required = true,
             content = @Content(mediaType = "application/json",
