@@ -25,14 +25,20 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
           env:
-            - name: MYSQL_HOST
-              value: bookshelf-monolith-db
-            - name: MYSQL_DB
-              value: bookshelf-monolith-db
+            - name: SPRING_PROFILES_ACTIVE
+              value: microservices
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://bookshelf-monolith-db/bookshelf-monolith-db
             - name: MYSQL_USER
               value: root
             - name: MYSQL_PASS
               value: password
+            - name: USER-SERVICE_HOST
+              value: user-service-service
+            - name: USER-SERVICE_PORT
+              value: "3100"
+          ports:
+          - containerPort: 3000
 ---
 
 # User service
@@ -55,7 +61,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: user-service
-          image: urjcmpuchades/mca-user-service:v1.0
+          image: urjcmpuchades/mca-bookshelf-user-service:v1.0
           securityContext:
             allowPrivilegeEscalation: false
           env:
@@ -67,6 +73,8 @@ spec:
               value: root
             - name: MYSQL_PASS
               value: password
+          ports:
+          - containerPort: 3000
 ---
 
 # MySQL Bookshelf Monolith DB

@@ -7,12 +7,18 @@ DOCKER_HUB_USER=urjcmpuchades
 echo "Build & publish bookshelf monolith..."
 BOOKSHELF_MONOLITH_IMAGE_NAME="${DOCKER_HUB_USER}/mca-bookshelf-monolith:v1.0"
 
-mvn -f bookshelf-monolith/ compile jib:build -Dimage=${BOOKSHELF_MONOLITH_IMAGE_NAME}
+cd bookshelf-monolith
+docker build -t $BOOKSHELF_MONOLITH_IMAGE_NAME .
+docker push $BOOKSHELF_MONOLITH_IMAGE_NAME
+cd ..
 
 # user-service monolith
 echo "Build & publish user-service monolith..."
-USER_SERVICE_IMAGE_NAME="${DOCKER_HUB_USER}/mca-user-service:v1.0"
+USER_SERVICE_IMAGE_NAME="${DOCKER_HUB_USER}/mca-bookshelf-user-service:v1.0"
 
-mvn -f user-service-monolith/ compile jib:build -Dimage=${USER_SERVICE_IMAGE_NAME}
+cd user-service
+docker build -t $USER_SERVICE_IMAGE_NAME .
+docker push $USER_SERVICE_IMAGE_NAME
+cd ..
 
 exit 0

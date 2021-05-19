@@ -1,0 +1,32 @@
+# The Bookshelf K8s services
+
+
+# Bookshelf monolith
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf-monolith-service
+  labels:
+    app: bookshelf-monolith
+spec:
+  selector:
+    app: bookshelf-monolith
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
+  type: LoadBalancer
+---
+
+# MySQL Bookshelf Monolith DB
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf-monolith-db-service
+spec:
+  selector:
+    app: bookshelf-monolith-db
+  ports:
+    - port: 3306
+  type: ClusterIP
