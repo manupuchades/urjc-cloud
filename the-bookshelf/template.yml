@@ -1,0 +1,380 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  the-bookshelf
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  AwsDynamoDBEndpoint:
+    Type: String
+    Description: The AWS DynamoDB endpoint.
+    Default: 'https://dynamodb.eu-west-1.amazonaws.com'
+
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # Each Lambda function is defined by properties:
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+ ### USER ###
+
+  # This is a Lambda function config associated with the source code: get-all-users.js
+  getAllUsersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user/get-all-users.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP GET method to get all users from a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref UserTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: get-user-by-id.js
+  getUserByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user/get-user-by-id.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP GET method to get one user by id from a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref UserTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/{id}
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: create-user.js
+  createUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user/create-user.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP POST method to add one user to a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref UserTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/
+            Method: POST
+
+  # This is a Lambda function config associated with the source code: delete-user.js
+  deleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user/delete-user.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP DELETE method to delete one user from the DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref UserTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/
+            Method: DELETE
+
+  # This is a Lambda function config associated with the source code: update-user.js
+  updateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/user/update-user.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP PATCH method to update one user from the DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref UserTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/
+            Method: PATCH
+
+### BOOK ###
+  # This is a Lambda function config associated with the source code: get-all-books.js
+  getAllBooksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/book/get-all-books.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP GET method to get all books from a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the BookTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BookTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref BookTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: get-book-by-id.js
+  getBookByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/book/get-book-by-id.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP GET method to get one book by id from a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the BookTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BookTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref BookTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/{id}
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: create-book.js
+  createBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/book/create-book.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP POST method to add one book to a DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the BookTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BookTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref BookTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/
+            Method: POST
+
+  # This is a Lambda function config associated with the source code: delete-book.js
+  deleteBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/book/delete-book.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP DELETE method to delete one book from the DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the BookTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref BookTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref BookTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/
+            Method: DELETE
+
+### COMMENT ###
+# This is a Lambda function config associated with the source code: get-all-comments.js
+  getAllCommentsByUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/comment/get-all-comments-by-user.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP GET method to get all comments from a single user in DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the CommentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CommentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref CommentTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/users/{userId}/comments/
+            Method: GET
+
+  # This is a Lambda function config associated with the source code: create-comment-in-book.js
+  createCommentInBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/comment/create-comment-in-book.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP POST method to add one comment to a book in DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the CommentTable & UserTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CommentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref CommentTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/{id}/comments/
+            Method: POST
+
+  # This is a Lambda function config associated with the source code: delete-comment.js
+  deleteCommentInBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/comment/delete-comment-in-book.handler
+      Runtime: nodejs14.x
+      MemorySize: 128
+      Timeout: 100
+      Description: This function includes a HTTP DELETE method to delete one comment from the DynamoDB table.
+      Policies:
+        # Give Create/Read/Update/Delete Permissions to the CommentTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CommentTable
+      Environment:
+        Variables:
+          # Make table name accessible as environment variable from function code during execution
+          USER_TABLE: !Ref CommentTable
+          AWS_DYNAMO_ENDPOINT: !Ref AwsDynamoDBEndpoint
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /api/v1/books/{id}/comments/{commentId}
+            Method: DELETE
+
+
+  ### USER DB
+  # DynamoDB table to store users:
+  UserTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: the-bookshelf-user
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+  
+  ### BOOK DB
+  # DynamoDB table to store books:
+  BookTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: the-bookshelf-book
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+  ### COMMENT DB
+  # DynamoDB table to store comments:
+  CommentTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: the-bookshelf-comment
+      PrimaryKey:
+        Name: id
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+### ENDPOINTS
+Outputs:
+  WebEndpoint:
+    Description: "API Gateway endpoint URL for The Bookshelf"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/api/v1/"

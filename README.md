@@ -40,6 +40,29 @@ comentan.
       práctica implementada con Node, Express y MongoDB. Además, también se ofrece una
       colección Postman para verificar que la implementación serverless es correcta
       funcionalmente.
+---
+* Construir la aplicación:
+```bash
+$ npm install
+$ sam build
+```
+
+
+* Despliegue en local:
+```bash
+$ sam local start-api
+```
+
+* Despliegue de la aplicacion:   
+
+```bash
+$ sam deploy --guided
+```
+
+* Borrado de la aplicacion:   
+```bash
+$ aws cloudformation delete-stack --stack-name sam-app --region region
+```
 
 ---
 [Code URJC - Máster Cloud Apps](https://www.codeurjc.es/mastercloudapps/) : Desarrollo y despliegue de aplicaciones en la nube  
